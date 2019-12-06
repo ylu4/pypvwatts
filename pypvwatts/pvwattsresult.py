@@ -5,9 +5,10 @@ class PVWattsResult(object):
     Result class for PVWatts request
     """
     # Result's output fields to be accesed as properties of PVWattsResult
-    shortcut_fields = ('poa_monthly', 'dc_monthly', 'ac_annual',
-                       'solrad_annual', 'solrad_monthly', 'ac_monthly',
-                       'ac', 'poa', 'dn', 'dc', 'df', 'tamb', 'tcell', 'wspd')
+    shortcut_fields = ('poa_monthly', 'dc_monthly', 'ac_monthly', 'ac_annual', 
+                       'solrad_monthly', 'solrad_annual', 'capacity_factor', 
+                       'ac', 'poa', 'dn', 'dc', 'df', 'tamb', 'tcell', 'wspd', 
+                      )
 
     def __init__(self, result):
         """

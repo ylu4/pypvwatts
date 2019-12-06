@@ -1,11 +1,11 @@
 # coding: utf-8
 """
-Python wrapper for NREL PVWatt version 5.
+Trying to update Python wrapper for NREL PVWatt from version 5 (by mpalino) to version 6.
 """
-from .pvwattsresult import PVWattsResult
-from .pvwattserror import PVWattsError, PVWattsValidationError
+from pvwattsresult import PVWattsResult
+from pvwattserror import PVWattsError, PVWattsValidationError
 import requests
-from .__version__ import VERSION
+from __version__ import VERSION
 
 import functools
 import sys
@@ -26,10 +26,10 @@ class omnimethod(object):
 
 class PVWatts():
     '''
-    A Python wrapper for NREL PVWatts V5.0.0 API
+    A Python wrapper for NREL PVWatts V6 API
     '''
 
-    PVWATTS_QUERY_URL = 'https://developer.nrel.gov/api/pvwatts/v5.json'
+    PVWATTS_QUERY_URL = 'https://developer.nrel.gov/api/pvwatts/v6.json'
     api_key = 'DEMO_KEY'
 
     def __init__(self, api_key='DEMO_KEY', proxies=None):
@@ -115,8 +115,8 @@ class PVWatts():
         if not isinstance(azimuth, (int, long, float)):
             raise PVWattsValidationError('azimuth must be int, long or float')
 
-        if not (0 <= azimuth and azimuth <= 360):
-            raise PVWattsValidationError('azimuth must be >= 0 and <= 360')
+        if not (0 <= azimuth and azimuth < 360):
+            raise PVWattsValidationError('azimuth must be >= 0 and < 360')
 
         return azimuth
 
@@ -154,9 +154,9 @@ class PVWatts():
         if not isinstance(dataset, (str, unicode)):
             raise PVWattsValidationError('dataset must be str or unicode')
 
-        if dataset not in ('tmy2', 'tmy3', 'intl'):
+        if dataset not in ('nsrdb', 'tmy2', 'tmy3', 'intl'):
             raise PVWattsValidationError(
-                'dataset must be \'tmy2\', \'tmy3\' or \'intl\'')
+                'dataset must be \'nsrdb\' \'tmy2\', \'tmy3\' or \'intl\'')
 
         return dataset
 
@@ -266,11 +266,11 @@ class PVWatts():
         return response.json()
 
     @omnimethod
-    def request(self, format=None, system_capacity=None, module_type=0,
-                losses=12, array_type=1, tilt=None, azimuth=None,
-                address=None, lat=None, lon=None, file_id=None, dataset='tmy3',
-                radius=0, timeframe='monthly', dc_ac_ratio=None, gcr=None,
-                inv_eff=None, callback=None):
+    def request(self, format='json', system_capacity=None, module_type=2,
+                losses=None, array_type=None, tilt=None, azimuth=180,
+                address=None, lat=None, lon=None, file_id=None, dataset='nsrdb',
+                radius=0, timeframe='monthly', dc_ac_ratio=1.2, gcr=0.4,
+                inv_eff=96, callback=None):
 
         params = {
             'format': format,
